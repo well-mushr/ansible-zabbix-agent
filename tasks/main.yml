@@ -1,0 +1,11 @@
+---
+- name: Include tasks according by OS
+  include_tasks: "{{ item.value }}"
+  when: ansible_distribution == item.key
+  with_dict:
+    CentOS: install_rhel.yml
+    RHEL: install_rhel.yml
+    Debian: install_debian.yml
+    Ubuntu: install_ubuntu.yml
+    Amazon: install_amazon.yml
+    Windows: install_windows.yml

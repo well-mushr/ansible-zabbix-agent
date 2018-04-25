@@ -1,0 +1,13 @@
+---
+zabbix_version: 3.2
+zabbix_repo: https://repo.zabbix.com/zabbix
+zabbix_host_groups: []
+zabbix_service: yes
+zabbix_auto_setup_init: yes
+
+
+zabbix_ubuntu_release_pkg: "zabbix-release_{{ zabbix_version }}-1+{{ ansible_distribution_release }}_all.deb"
+zabbix_ubuntu_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/ubuntu/pool/main/z/zabbix-release/{{ zabbix_ubuntu_release_pkg }}"
+
+zabbix_rhel_release_pkg: "zabbix-release-{{ zabbix_version }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
+zabbix_rhel_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/rhel/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/{{ zabbix_rhel_release_pkg }}"

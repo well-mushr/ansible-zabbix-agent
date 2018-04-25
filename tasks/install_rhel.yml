@@ -1,0 +1,25 @@
+---
+- name: Install Repository
+  yum:
+    name: "{{ zabbix_rhel_release_pkg_url }}"
+    state: present
+
+- name: Ensure zabbix packages is installed
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - zabbix-agent
+    - zabbix-sender
+
+- name: Setup SystemD
+  include_tasks: setup_systemd.yml
+  when:
+    - zabbix_auto_setup_init
+    - ansible_distribution_version >= 7
+
+- name: Setup SysV
+  include_tasks: setup_sysv.yml
+  when:
+    - zabbix_auto_setup_init
+    - ansible_distribution_version < 7

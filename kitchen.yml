@@ -1,0 +1,33 @@
+---
+driver:
+  name: docker
+
+provisioner:
+  name: ansible_playbook
+  hosts: localhost
+  require_ansible_repo: true
+  ansible_verbose: true
+  ansible_version: latest
+  require_chef_for_busser: false
+  playbook: test/test.yml
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: ubuntu-14.04
+  - name: ubuntu-16.04
+  - name: centos-7
+  - name: centos-6
+  # - name: windows-2012
+  #   driver_config:
+  #     box: windows2012r2
+  #     comunicator: winrm
+  #   transport:
+  #     name: winrm
+
+suites:
+  - name: default
+    verifier:
+      inspec_tests:
+        - test/integration/default
