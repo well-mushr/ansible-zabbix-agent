@@ -1,0 +1,17 @@
+---
+- name: Ensure packages is installed
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ zabbix_depends[ansible_distribution]['packages'] }}"
+
+- name: Ensure pip depends is installed
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ zabbix_depends[ansible_distribution]['pips'] }}"
+
+- name: Set confs per Plataform
+  set_fact:
+    zabbix_conf_dir: "{{ zabbix_linux_conf_dir }}"
+    zabbix_agent_confs: "{{ zabbix_linux_agent_confs }}"

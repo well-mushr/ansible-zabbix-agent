@@ -12,14 +12,7 @@
     - zabbix-agent
     - zabbix-sender
 
-- name: Setup SystemD
-  include_tasks: setup_systemd.yml
-  when:
-    - zabbix_auto_setup_init
-    - ansible_distribution_version >= 7
-
-- name: Setup SysV
-  include_tasks: setup_sysv.yml
-  when:
-    - zabbix_auto_setup_init
-    - ansible_distribution_version < 7
+- name: Set facts for RedHat/Centos
+  set_fact:
+    is_systemd={% if ansible_distribution_version is version('7', '>=') %}true{% else %}false{% endif %}
+    is_sysv={% if ansible_distribution_version is version('7', '<') %}true{% else %}false{% endif %}

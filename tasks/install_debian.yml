@@ -1,0 +1,18 @@
+---
+- name: Install Repository
+  apt:
+    deb: "{{ zabbix_debian_release_pkg_url }}"
+
+- name: Ensure zabbix packages is installed
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - zabbix-agent
+    - zabbix-sender
+
+- name: Set facts for Debian
+  set_fact:
+    is_systemd={% if ansible_distribution_version is version('8', '>=') %}true{% else %}false{% endif %}
+    is_sysv={% if ansible_distribution_version is version('8', '<') %}true{% else %}false{% endif %}

@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
   remote_user: root
+  vars:
+    zabbix_auto_register: no
   roles:
-    - zabbix-agent
+    - ansible-zabbix-agent

@@ -1,15 +1,23 @@
+GIT
+  remote: https://github.com/wmaramos/kitchen-ansible.git
+  revision: 44437d60819c72a900f7c03059ed75f2fec3d76a
+  specs:
+    kitchen-ansible (0.48.3)
+      net-ssh (>= 3)
+      test-kitchen (~> 1.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
-    aws-sdk (2.11.36)
-      aws-sdk-resources (= 2.11.36)
-    aws-sdk-core (2.11.36)
+    aws-sdk (2.11.48)
+      aws-sdk-resources (= 2.11.48)
+    aws-sdk-core (2.11.48)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.11.36)
-      aws-sdk-core (= 2.11.36)
+    aws-sdk-resources (2.11.48)
+      aws-sdk-core (= 2.11.48)
     aws-sigv4 (1.0.2)
     azure_mgmt_resources (0.16.0)
       ms_rest_azure (~> 0.10.0)
@@ -24,7 +32,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     excon (0.62.0)
-    faraday (0.15.0)
+    faraday (0.15.1)
       multipart-post (>= 1.2, < 3)
     faraday-cookie_jar (0.0.6)
       faraday (>= 0.7.4)
@@ -40,7 +48,7 @@ GEM
       domain_name (~> 0.5)
     httpclient (2.8.3)
     inifile (3.0.0)
-    inspec (2.1.0)
+    inspec (2.1.72)
       addressable (~> 2.4)
       faraday (>= 0.9.0)
       hashie (~> 3.4)
@@ -56,26 +64,26 @@ GEM
       rubyzip (~> 1.1)
       semverse
       sslshake (~> 1.2)
-      thor (~> 0.19)
+      thor (~> 0.20)
       tomlrb (~> 1.2)
-      train (~> 1.2)
+      train (~> 1.4)
     jmespath (1.4.0)
     json (2.1.0)
-    kitchen-ansible (0.48.3)
-      net-ssh (>= 3)
-      test-kitchen (~> 1.4)
     kitchen-docker (2.6.0)
       test-kitchen (>= 1.0.0)
     kitchen-inspec (0.23.1)
       hashie (~> 3.4)
       inspec (>= 0.34.0, < 3.0.0)
       test-kitchen (~> 1.6)
+    kitchen-pester (0.8.0)
+      test-kitchen (~> 1.10)
     little-plugger (1.1.4)
     logging (2.2.2)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
     method_source (0.9.0)
-    mixlib-install (3.9.3)
+    minitar (0.6.1)
+    mixlib-install (3.10.0)
       mixlib-shellout
       mixlib-versioning
       thor
@@ -125,20 +133,20 @@ GEM
     rubyzip (1.2.1)
     semverse (2.0.0)
     sslshake (1.2.0)
-    test-kitchen (1.21.1)
+    test-kitchen (1.21.2)
       mixlib-install (~> 3.6)
       mixlib-shellout (>= 1.2, < 3.0)
       net-scp (~> 1.1)
       net-ssh (>= 2.9, < 5.0)
       net-ssh-gateway (~> 1.2)
-      thor (~> 0.19, < 0.19.2)
+      thor (~> 0.19)
       winrm (~> 2.0)
       winrm-elevated (~> 1.0)
       winrm-fs (~> 1.1)
-    thor (0.19.1)
+    thor (0.20.0)
     timeliness (0.3.8)
     tomlrb (1.2.6)
-    train (1.4.1)
+    train (1.4.4)
       aws-sdk (~> 2)
       azure_mgmt_resources (~> 0.15)
       docker-api (~> 1.26)
@@ -152,6 +160,8 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
+    vagrant-winrm (0.7.0)
+      minitar (~> 0.5)
     winrm (2.2.3)
       builder (>= 2.1.2)
       erubis (~> 2.7)
@@ -175,10 +185,14 @@ PLATFORMS
 
 DEPENDENCIES
   inspec
-  kitchen-ansible
+  kitchen-ansible!
   kitchen-docker
   kitchen-inspec
+  kitchen-pester
   test-kitchen
+  vagrant-winrm
+  winrm
+  winrm-fs
 
 BUNDLED WITH
    1.16.1

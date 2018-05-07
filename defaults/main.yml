@@ -3,11 +3,81 @@ zabbix_version: 3.2
 zabbix_repo: https://repo.zabbix.com/zabbix
 zabbix_host_groups: []
 zabbix_service: yes
-zabbix_auto_setup_init: yes
+zabbix_setup_init: no
+zabbix_auto_deregister: yes
+zabbix_auto_register: yes
+zabbix_install_monitoring_depends: yes
+zabbix_owner: zabbix
+zabbix_server: 127.0.0.1
+zabbix_endpoint: "http://{{ zabbix_server }}/zabbix"
+zabbix_api_username: zabbix
+zabbix_api_password: zabbix
+zabbix_extras: []
+zabbix_templates: []
+zabbix_timeout: 60
+zabbix_enable_service: yes
+zabbix_host_name: "{{ ansbile_fqdn }}"
+zabbix_host_metadata: 10526e7fcn4480a7d01edcfbcb0bb87e4cf211659da214865d7685c03b77d6999
 
+zabbix_rhel_release_pkg: "zabbix-release-{{ zabbix_version }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
+zabbix_rhel_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/rhel/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/{{ zabbix_rhel_release_pkg }}"
+
+zabbix_amazon_release_pkg: "zabbix-release-{{ zabbix_version }}-1.el6.noarch.rpm"
+zabbix_amazon_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/rhel/6/{{ ansible_architecture }}/{{ zabbix_amazon_release_pkg }}"
 
 zabbix_ubuntu_release_pkg: "zabbix-release_{{ zabbix_version }}-1+{{ ansible_distribution_release }}_all.deb"
 zabbix_ubuntu_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/ubuntu/pool/main/z/zabbix-release/{{ zabbix_ubuntu_release_pkg }}"
 
-zabbix_rhel_release_pkg: "zabbix-release-{{ zabbix_version }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
-zabbix_rhel_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/rhel/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/{{ zabbix_rhel_release_pkg }}"
+zabbix_debian_release_pkg: "zabbix-release_{{ zabbix_version }}-1+{{ ansible_distribution_release }}_all.deb"
+zabbix_debian_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/debian/pool/main/z/zabbix-release/{{ zabbix_debian_release_pkg }}"
+
+zabbix_depends:
+  CentOS:
+    packages:
+      - python-pip
+    pips:
+      - zabbix-api
+  Ubuntu:
+    packages:
+      - python-pip
+    pips:
+      - zabbix-api
+  Debian:
+    packages:
+      - python-pip
+    pips:
+      - zabbix-api
+  Amazon:
+    packages:
+      - python27-pip
+    pips:
+      - zabbix-api
+
+zabbix_slack_notify: no
+# You've got to defined zabbix_slack_endpoint using slack hook, someting like
+# zabbix_slack_endpoint: https://hooks.slack.com/services/XXXXX/YYYYY/ZZZZZZ
+zabbix_slack_payload:
+  channel: zabbix
+  username: zabbix
+  text: "Instance {{ zabbix_host_name }} added to Zabbix"
+  icon_emoji: ":rotating_light:"
+
+zabbix_linux_conf_dir: /etc/zabbix
+zabbix_linux_agent_confs:
+  LogFile: /var/log/zabbix/zabbix_agentd.log
+  LogFileSize: 1
+  ServerActive: "{{ zabbix_server }}"
+  Server: "{{ zabbix_server }}"
+  StartAgents: 10
+  Timeout: 30
+  Include: /etc/zabbix/zabbix_agentd.d/
+  PidFile: /var/run/zabbix/zabbix_agentd.pid
+  HostMetadata: "{{ zabbix_host_metadata }}"
+
+zabbix_windows_conf_dir: C:\Zabbix
+zabbix_windows_agent_confs:
+  LogFile: C:\Zabbix\zabbix_agentd.log
+  LogFileSize: 1
+  Server: "{{ zabbix_server }}"
+  ServerActive: "{{ zabbix_server }}"
+  HostMetadata: "{{ zabbix_host_metadata }}"

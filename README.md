@@ -1,3 +1,5 @@
+vagrant plugin install vagrant-winrm
+
 Role Name
 =========
 

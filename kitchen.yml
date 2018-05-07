@@ -1,6 +1,7 @@
 ---
 driver:
   name: docker
+  privileged: true
 
 provisioner:
   name: ansible_playbook
@@ -10,21 +11,32 @@ provisioner:
   ansible_version: latest
   require_chef_for_busser: false
   playbook: test/test.yml
+  enable_yum_epel: true
 
 verifier:
   name: inspec
+  format: junit
+  output: test/reports/%{platform}_%{suite}_inspec.xml
 
 platforms:
   - name: ubuntu-14.04
   - name: ubuntu-16.04
-  - name: centos-7
+    driver_config:
+      image: wmaramos/kitchen-ubuntu:16.04
+      run_command: /sbin/init
   - name: centos-6
-  # - name: windows-2012
-  #   driver_config:
-  #     box: windows2012r2
-  #     comunicator: winrm
-  #   transport:
-  #     name: winrm
+  - name: centos-7
+    driver_config:
+      image: wmaramos/kitchen-centos:7
+      run_command: /usr/sbin/init
+  - name: debian-8
+    driver_config:
+      image: wmaramos/kitchen-debian:8
+      run_command: /sbin/init
+  - name: amazonlinux
+    driver_config:
+      image: amazonlinux:latest
+      platform: centos
 
 suites:
   - name: default

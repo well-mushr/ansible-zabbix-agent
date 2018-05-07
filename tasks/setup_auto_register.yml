@@ -1,0 +1,62 @@
+---
+- name: Adding Group for OS Family
+  set_fact:
+    zabbix_host_groups: "{{ zabbix_host_groups |union([ansible_os_family]) }}"
+
+- name: Ensure Zabbix Host Groups is created
+  zabbix_group:
+    server_url: "{{ zabbix_endpoint }}"
+    login_user: "{{ zabbix_api_username }}"
+    login_password: "{{ zabbix_api_password }}"
+    host_groups: "{{ zabbix_host_groups }}"
+    state: present
+
+- name: Setting Host IP using ansible_ip_addresses
+  set_fact:
+    zabbix_host_ip: "{{ ansible_ip_addresses.0 }}"
+  when: ansible_ip_addresses is defined
+
+- name: Setting Host IP using ansible_default_ipv4
+  set_fact:
+    zabbix_host_ip: "{{ ansible_default_ipv4.address }}"
+  when: ansible_default_ipv4 is defined
+
+- name: Include Tasks for Custom Monitor and Scripts
+  include_tasks: "{{ zabbix_extras }}.yml"
+  when: zabbix_extras | length > 0
+
+- name: Register Host into Zabbix
+  zabbix_host:
+    server_url: "{{ zabbix_endpoint }}"
+    login_user: "{{ zabbix_api_username }}"
+    login_password: "{{ zabbix_api_password }}"
+    timeout: "{{ zabbix_timeout }}"
+    host_name: "{{ zabbix_host_name }}"
+    host_groups: "{{ zabbix_host_groups }}"
+    link_templates: "{{ zabbix_templates }}"
+    status: enabled
+    state: present
+    inventory_mode: automatic
+    interfaces:
+      - type: 1
+        main: 1
+        useip: 1
+        ip: "{{ zabbix_host_ip }}"
+        dns: ""
+        port: 10050
+
+- name: Notify via Slack
+  uri:
+    method: POST
+    body: "payload={{ zabbix_slack_payload |to_json }}"
+    url: "{{ zabbix_slack_endpoint }}"
+  args:
+    creates: /var/tmp/notify_slack.lock
+  register: zabbix_slack
+  when: zabbix_slack_notify
+
+- name: Create file lock
+  file:
+    path: /var/tmp/notify_slack.lock
+    state: touch
+  when: zabbix_slack.changed

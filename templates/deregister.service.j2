@@ -1,0 +1,12 @@
+[Unit]
+Description=Disables Zabbix Host on Zabbix server upon shutdown.
+Conflicts=reboot.target
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStop=/bin/bash {{ zabbix_conf_dir }}/scripts/deregister.py
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

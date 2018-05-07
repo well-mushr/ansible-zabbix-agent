@@ -1,11 +1,61 @@
 ---
-- name: Include tasks according by OS
-  include_tasks: "{{ item.value }}"
-  when: ansible_distribution == item.key
+- name: Ensure dependencies is installed
+  include_tasks: "{{ ansible_system |lower }}_depends.yml"
+
+- name: Specfic tasks according ansible_distribution
+  include_tasks: "{{ os.value }}"
+  when: ansible_distribution == os.key
   with_dict:
     CentOS: install_rhel.yml
-    RHEL: install_rhel.yml
+    Amazon: install_amazon.yml
     Debian: install_debian.yml
     Ubuntu: install_ubuntu.yml
-    Amazon: install_amazon.yml
     Windows: install_windows.yml
+  loop_control:
+    loop_var: os
+
+- name: Ensure directory to store scripts is created
+  file:
+    path: "{{ zabbix_conf_dir }}/scripts"
+    owner: "{{ zabbix_owner }}"
+    group: "{{ zabbix_owner }}"
+    state: directory
+
+- name: Configure deregister Host from Zabbix
+  include_tasks: setup_deregister.yml
+  when: zabbix_auto_deregister
+
+- name: Configure auto register Host from Zabbix
+  include_tasks: setup_auto_register.yml
+  when: zabbix_auto_register
+
+- name: Ensure zabbix_agentd.conf is present
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: "{{ zabbix_conf_dir }}/zabbix_agentd.conf"
+    owner: zabbix
+    group: zabbix
+
+- name: Ensure zabbix-agent is enabled and started in SysV
+  service:
+    name: zabbix-agent
+    enabled: yes
+    state: started
+  when:
+    - is_sysv
+    - zabbix_enable_service
+
+- name: Ensure zabbix-agent is enabled and started in Systemd
+  systemd:
+    name: zabbix-agent
+    enabled: yes
+    state: started
+  when:
+    - is_systemd
+    - zabbix_enable_service
+
+- name: Ensure zabbix-agent service is enabled
+  command: systemctl enable zabbix-agent
+  when:
+    - zabbix_enable_service
+    - is_systemd
