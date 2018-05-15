@@ -1,6 +1,13 @@
 GIT
+  remote: https://github.com/test-kitchen/kitchen-docker.git
+  revision: 9eabd0107ab13927b7a7bf3e7ba43ba251551457
+  specs:
+    kitchen-docker (2.6.1.pre)
+      test-kitchen (>= 1.0.0)
+
+GIT
   remote: https://github.com/wmaramos/kitchen-ansible.git
-  revision: 44437d60819c72a900f7c03059ed75f2fec3d76a
+  revision: e5751f0ee3d4a6b1fbae6362ff066fbf2dd5f45d
   specs:
     kitchen-ansible (0.48.3)
       net-ssh (>= 3)
@@ -11,13 +18,13 @@ GEM
   specs:
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
-    aws-sdk (2.11.48)
-      aws-sdk-resources (= 2.11.48)
-    aws-sdk-core (2.11.48)
+    aws-sdk (2.11.49)
+      aws-sdk-resources (= 2.11.49)
+    aws-sdk-core (2.11.49)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.11.48)
-      aws-sdk-core (= 2.11.48)
+    aws-sdk-resources (2.11.49)
+      aws-sdk-core (= 2.11.49)
     aws-sigv4 (1.0.2)
     azure_mgmt_resources (0.16.0)
       ms_rest_azure (~> 0.10.0)
@@ -69,8 +76,6 @@ GEM
       train (~> 1.4)
     jmespath (1.4.0)
     json (2.1.0)
-    kitchen-docker (2.6.0)
-      test-kitchen (>= 1.0.0)
     kitchen-inspec (0.23.1)
       hashie (~> 3.4)
       inspec (>= 0.34.0, < 3.0.0)
@@ -186,7 +191,7 @@ PLATFORMS
 DEPENDENCIES
   inspec
   kitchen-ansible!
-  kitchen-docker
+  kitchen-docker!
   kitchen-inspec
   kitchen-pester
   test-kitchen

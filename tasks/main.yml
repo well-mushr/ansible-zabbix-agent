@@ -1,16 +1,18 @@
 ---
 - name: Ensure dependencies is installed
-  include_tasks: "{{ ansible_system |lower }}_depends.yml"
+  include_tasks: linux_depends.yml
+  when: ansible_system == "Linux"
 
 - name: Specfic tasks according ansible_distribution
   include_tasks: "{{ os.value }}"
-  when: ansible_distribution == os.key
+  when: os.key in ansible_distribution
   with_dict:
     CentOS: install_rhel.yml
     Amazon: install_amazon.yml
     Debian: install_debian.yml
     Ubuntu: install_ubuntu.yml
     Windows: install_windows.yml
+    openSUSE_Leap: install_suse.yml
   loop_control:
     loop_var: os
 
@@ -38,7 +40,7 @@
 
 - name: Ensure zabbix-agent is enabled and started in SysV
   service:
-    name: zabbix-agent
+    name: "{{ zabbix_agent_daemon }}"
     enabled: yes
     state: started
   when:
@@ -47,7 +49,7 @@
 
 - name: Ensure zabbix-agent is enabled and started in Systemd
   systemd:
-    name: zabbix-agent
+    name: "{{ zabbix_agent_daemon }}"
     enabled: yes
     state: started
   when:
@@ -55,7 +57,7 @@
     - zabbix_enable_service
 
 - name: Ensure zabbix-agent service is enabled
-  command: systemctl enable zabbix-agent
+  command: "systemctl enable {{ zabbix_agent_daemon }}"
   when:
     - zabbix_enable_service
     - is_systemd

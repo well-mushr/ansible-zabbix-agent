@@ -1,0 +1,24 @@
+---
+- name: List repositories from Suse
+  shell: zypper repos
+  register: suse_repos
+
+- name: Install Repository
+  zypper_repository:
+    repo: "{{ zabbix_suse_release_pkg_url }}"
+    auto_import_keys: yes
+    state: present
+  when: not 'server_monitoring' in suse_repos.stdout
+
+- name: Update metadata
+  shell: zypper --no-gpg-checks refresh
+
+- name: Ensure zabbix packages is installed
+  zypper:
+    name: zabbix-agent
+    state: latest
+
+- name: Set facts for RedHat/Centos
+  set_fact:
+    is_systemd={% if ansible_distribution_version is version_compare('12', '>=') %}true{% else %}false{% endif %}
+    is_sysv={% if ansible_distribution_version is version_compare('12', '<') %}true{% else %}false{% endif %}

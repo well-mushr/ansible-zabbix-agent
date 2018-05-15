@@ -31,27 +31,46 @@ zabbix_ubuntu_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/ubuntu/po
 zabbix_debian_release_pkg: "zabbix-release_{{ zabbix_version }}-1+{{ ansible_distribution_release }}_all.deb"
 zabbix_debian_release_pkg_url: "{{ zabbix_repo }}/{{ zabbix_version }}/debian/pool/main/z/zabbix-release/{{ zabbix_debian_release_pkg }}"
 
-zabbix_depends:
+zabbix_suse_release_pkg: "server:monitoring.repo"
+zabbix_suse_release_pkg_url: "http://download.opensuse.org/repositories/server:/monitoring/{{ ansible_distribution }}_{{ ansible_distribution_version }}/{{ zabbix_suse_release_pkg }}"
+
+zabbix_facts:
   CentOS:
     packages:
       - python-pip
     pips:
       - zabbix-api
+    agent_daemon: zabbix-agent
   Ubuntu:
     packages:
       - python-pip
     pips:
       - zabbix-api
+    agent_daemon: zabbix-agent
   Debian:
     packages:
       - python-pip
     pips:
       - zabbix-api
+    agent_daemon: zabbix-agent
   Amazon:
     packages:
       - python27-pip
     pips:
       - zabbix-api
+    agent_daemon: zabbix-agent
+  openSUSE_Leap:
+    packages:
+      - python-pip
+    pips:
+      - zabbix-api
+    agent_daemon: zabbix-agentd
+  Suse:
+    packages:
+      - python-pip
+    pips:
+      - zabbix-api
+    agent_daemon: zabbix-agentd
 
 zabbix_slack_notify: no
 # You've got to defined zabbix_slack_endpoint using slack hook, someting like

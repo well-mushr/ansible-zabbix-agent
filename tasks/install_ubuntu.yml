@@ -14,5 +14,5 @@
 
 - name: Set facts for Ubuntu
   set_fact:
-    is_systemd={% if ansible_distribution_version is version('16.04', '>=') %}true{% else %}false{% endif %}
-    is_sysv={% if ansible_distribution_version is version('16.04', '<') %}true{% else %}false{% endif %}
+    is_systemd={% if ansible_distribution_version is version_compare('16.04', '>=') %}true{% else %}false{% endif %}
+    is_sysv={% if ansible_distribution_version is version_compare('16.04', '<') %}true{% else %}false{% endif %}

@@ -15,28 +15,33 @@ provisioner:
 
 verifier:
   name: inspec
-  format: junit
-  output: test/reports/%{platform}_%{suite}_inspec.xml
 
 platforms:
   - name: ubuntu-14.04
   - name: ubuntu-16.04
     driver_config:
       image: wmaramos/kitchen-ubuntu:16.04
+      volume: /sys/fs/cgroup:/sys/fs/cgroup
       run_command: /sbin/init
   - name: centos-6
   - name: centos-7
     driver_config:
       image: wmaramos/kitchen-centos:7
+      volume: /sys/fs/cgroup:/sys/fs/cgroup
       run_command: /usr/sbin/init
   - name: debian-8
     driver_config:
       image: wmaramos/kitchen-debian:8
+      volume: /sys/fs/cgroup:/sys/fs/cgroup
       run_command: /sbin/init
   - name: amazonlinux
     driver_config:
-      image: amazonlinux:latest
       platform: centos
+  - name: opensuse-42
+    driver_config:
+      image: wmaramos/kitchen-opensuse:42.3
+      volume: /sys/fs/cgroup:/sys/fs/cgroup
+      run_command: /usr/lib/systemd/systemd --system
 
 suites:
   - name: default
